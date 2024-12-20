@@ -1,0 +1,31 @@
+name: Upload to PyPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Build Run ID (leave empty to use latest)"
+        required: false
+        type: string
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts from specific run
+        if: inputs.run_id != ''
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ inputs.run_id }}
+
+      - name: Download artifacts from latest run
+        if: inputs.run_id == ''
+        uses: actions/download-artifact@v4
+
+      - name: Publish to PyPI
+        uses: PyO3/maturin-action@v1
+        env:
+          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+        with:
+          command: upload
+          args: --non-interactive --skip-existing wheels-*/*
