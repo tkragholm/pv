@@ -1,0 +1,55 @@
+[package]
+name = "parquet-viewer"
+version = "0.1.0"
+edition = "2021"
+authors = ["Tobias Kragholm <tkragholm@gmail.com>"]
+description = "A high-performance Parquet file viewer with CSV export capabilities"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/tkragholm/parquet-viewer"
+keywords = ["parquet", "csv", "viewer", "data", "converter"]
+categories = ["command-line-utilities", "database-tools"]
+readme = "README.md"
+
+[dependencies]
+arrow = "53.3.0"
+chrono = "0.4.39"
+clap = { version = "4.5.23", features = ["derive", "cargo", "help", "usage"] }
+csv = "1.3.1"
+indicatif = { version = "0.17.9", features = ["rayon", "improved_unicode"] }
+parking_lot = "0.12.3"
+parquet = "53.3.0"
+rayon = "1.10.0"
+tempfile = "3.14.0"
+rand = "0.8.5"
+csvlens = "0.11.0"
+thiserror = "1.0"
+anyhow = "1.0"
+num_cpus = "1.16.0"
+
+# Linux-specific dependencies
+[target.'cfg(target_os = "linux")'.dependencies]
+openssl = { version = "0.10", features = ["vendored"] }
+
+# Windows-specific dependencies
+[target.'cfg(target_os = "windows")'.dependencies]
+winapi = { version = "0.3", features = ["winuser", "fileapi"] }
+
+# macOS-specific dependencies
+[target.'cfg(target_os = "macos")'.dependencies]
+core-foundation = "0.9"
+core-foundation-sys = "0.8"
+
+
+# Build configuration
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = 'abort'
+strip = true
+
+# Cross-compilation features
+[features]
+default = []
+static = []
+vendored = ["openssl/vendored"]
