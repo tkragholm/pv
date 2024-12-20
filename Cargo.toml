@@ -1,9 +1,9 @@
 [package]
-name = "parquet-viewer"
+name = "parquetv"
 version = "0.1.0"
 edition = "2021"
 authors = ["Tobias Kragholm <tkragholm@gmail.com>"]
-description = "A high-performance Parquet file viewer with CSV export capabilities"
+description = "A high-performance Parquet file viewer"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/tkragholm/parquet-viewer"
 keywords = ["parquet", "csv", "viewer", "data", "converter"]
