@@ -22,10 +22,24 @@ jobs:
         if: inputs.run_id == ''
         uses: actions/download-artifact@v4
 
+      # Add this step to debug
+      - name: List downloaded files
+        run: |
+          echo "Current directory structure:"
+          ls -R
+
+      # Add this step to move all wheels to a single directory
+      - name: Prepare wheels
+        run: |
+          mkdir -p dist
+          find . -name "*.whl" -o -name "*.tar.gz" -exec cp {} dist/ \;
+          echo "Contents of dist directory:"
+          ls -l dist/
+
       - name: Publish to PyPI
         uses: PyO3/maturin-action@v1
         env:
           MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
         with:
           command: upload
-          args: --non-interactive --skip-existing wheels-*/*
+          args: --non-interactive --skip-existing dist/*
